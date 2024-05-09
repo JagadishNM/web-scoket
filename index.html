@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0" />
+		<title>Web Socket</title>
+		<style>
+			#form {
+				display: flex;
+				position: fixed;
+				bottom: 0;
+				margin: 15px;
+				width: 100%;
+			}
+
+			#form input {
+				border: 1px solid #000;
+				border-radius: 20px;
+				height: 30px;
+				padding: 0 15px;
+				width: calc(100% - 158px);
+			}
+			button {
+				margin-left: 10px;
+				background: gray;
+				color: #fff;
+				border: 0;
+				height: 30px;
+				width: 74px;
+				border-radius: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<ul id="messages"></ul>
+		<form
+			id="form"
+			action="">
+			<input
+				id="input"
+				autocomplete="off" />
+			<button>Send</button>
+		</form>
+	</body>
+	<script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.5/dist/socket.io.min.js"></script>
+	<script>
+		const socket = window.io();
+		const form = document.getElementById('form');
+		const input = document.getElementById('input');
+		const messages = document.getElementById('messages');
+
+		form.addEventListener('submit', (e) => {
+			e.preventDefault();
+
+			if (input.value) {
+				console.log(input.value);
+				socket.emit('chat message', input.value);
+				input.value = '';
+			}
+		});
+
+		socket.on('chat message', (msg) => {
+			const item = document.createElement('li');
+			item.textContent = msg;
+			messages.append(item);
+		});
+	</script>
+</html>
